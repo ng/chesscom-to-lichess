@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Chess.com → Lichess Importer",
+  "version": "0.1.0",
+  "description": "One-click import of the chess.com game you're viewing into lichess.org.",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": [
+    "https://www.chess.com/*",
+    "https://lichess.org/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Import to Lichess"
+  }
+}
