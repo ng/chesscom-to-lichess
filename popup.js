@@ -44,6 +44,11 @@ btn.addEventListener('click', async () => {
       throw new Error(data.error || `Lichess returned ${res.status}`);
     }
 
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: closeShareModalOnPage,
+    }).catch(() => {});
+
     chrome.tabs.create({ url: data.url });
     statusEl.innerHTML = `Opened <a href="${data.url}" target="_blank" rel="noopener">${data.url}</a>`;
   } catch (err) {
@@ -52,6 +57,16 @@ btn.addEventListener('click', async () => {
     btn.disabled = false;
   }
 });
+
+// Runs in the chess.com page. Must be self-contained — no closures.
+function closeShareModalOnPage() {
+  const click = (el) =>
+    el && el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+  const closeBtn = document.querySelector(
+    '[data-cy="modal-close-button"], [aria-label="Close" i], .modal-close'
+  );
+  if (closeBtn) click(closeBtn);
+}
 
 // Runs in the chess.com page. Must be self-contained — no closures.
 function extractPgnFromPage() {
