@@ -28,6 +28,15 @@ button:disabled {
   opacity: 0.6;
   cursor: wait;
 }
+.hint {
+  font-size: 11px;
+  color: #666;
+  margin: 8px 0 0;
+  line-height: 1.4;
+}
+.hint a {
+  color: #759900;
+}
 #status {
   margin-top: 10px;
   font-size: 12px;
