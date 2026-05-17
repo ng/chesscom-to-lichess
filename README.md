@@ -64,7 +64,11 @@ npm install
 npm run lint
 ```
 
-CI runs ESLint and uploads an unpacked-extension artifact on every push. Tagging a `vX.Y.Z` matching `manifest.json` triggers a release build that attaches the zip to a GitHub Release.
+CI runs ESLint and uploads an unpacked-extension artifact on every push.
+
+### Releases
+
+Releases are driven by [release-please](https://github.com/googleapis/release-please). Commit to `main` using [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`, `feat!:` for breaking, etc.). Release-please opens and maintains a release PR that bumps `manifest.json` and updates the changelog; merging that PR cuts a `vX.Y.Z` tag, which the release workflow turns into a GitHub Release with the zip attached.
 
 ## License
 
