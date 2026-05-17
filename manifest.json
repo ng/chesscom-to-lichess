@@ -1,9 +1,12 @@
 {
   "manifest_version": 3,
   "name": "Lichess Analyzer",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "One-click import of the chess.com game you're viewing into lichess.org for analysis.",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
   "host_permissions": [
     "https://www.chess.com/*",
     "https://lichess.org/*"
