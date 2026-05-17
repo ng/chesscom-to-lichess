@@ -51,3 +51,16 @@ button:disabled {
 #status.error {
   color: #b00020;
 }
+.credit {
+  font-size: 10px;
+  color: #999;
+  margin: 12px 0 0;
+  text-align: center;
+}
+.credit a {
+  color: #999;
+  text-decoration: none;
+}
+.credit a:hover {
+  text-decoration: underline;
+}

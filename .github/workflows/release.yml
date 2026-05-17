@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify tag matches manifest version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          manifest_version=$(node -p "require('./manifest.json').version")
+          if [ "$tag" != "$manifest_version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME (=$tag) does not match manifest.json version $manifest_version"
+            exit 1
+          fi
+
+      - name: Build extension zip
+        run: |
+          name="lichess-analyzer-${GITHUB_REF_NAME}.zip"
+          zip -r "$name" \
+            manifest.json popup.html popup.css popup.js icons LICENSE README.md
+          echo "ZIP_NAME=$name" >> "$GITHUB_ENV"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes \
+            "$ZIP_NAME"

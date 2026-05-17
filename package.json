@@ -1,0 +1,16 @@
+{
+  "name": "chesscom-to-lichess",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "description": "Chrome extension that imports the chess.com game you're viewing into lichess.org.",
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "eslint": "^9.18.0",
+    "globals": "^15.14.0"
+  }
+}
