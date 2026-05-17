@@ -1,39 +1,42 @@
 name: Release
 
 on:
-  push:
-    tags: ['v*']
+  release:
+    types: [published]
 
 permissions:
   contents: write
 
 jobs:
-  release:
+  attach-zip:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
 
       - name: Verify tag matches manifest version
         run: |
-          tag="${GITHUB_REF_NAME#v}"
+          tag="${TAG#v}"
           manifest_version=$(node -p "require('./manifest.json').version")
           if [ "$tag" != "$manifest_version" ]; then
-            echo "::error::Tag $GITHUB_REF_NAME (=$tag) does not match manifest.json version $manifest_version"
+            echo "::error::Tag $TAG (=$tag) does not match manifest.json version $manifest_version"
             exit 1
           fi
+        env:
+          TAG: ${{ github.event.release.tag_name }}
 
       - name: Build extension zip
         run: |
-          name="lichess-analyzer-${GITHUB_REF_NAME}.zip"
+          name="lichess-analyzer-${TAG}.zip"
           zip -r "$name" \
             manifest.json popup.html popup.css popup.js icons LICENSE README.md
           echo "ZIP_NAME=$name" >> "$GITHUB_ENV"
+        env:
+          TAG: ${{ github.event.release.tag_name }}
 
-      - name: Create GitHub Release
+      - name: Upload zip to release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create "$GITHUB_REF_NAME" \
-            --title "$GITHUB_REF_NAME" \
-            --generate-notes \
-            "$ZIP_NAME"
+          TAG: ${{ github.event.release.tag_name }}
+        run: gh release upload "$TAG" "$ZIP_NAME" --clobber
